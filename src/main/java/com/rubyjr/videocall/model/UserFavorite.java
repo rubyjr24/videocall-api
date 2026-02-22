@@ -20,7 +20,7 @@ public class UserFavorite implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(nullable = false)
-    private Integer id;
+    private Long id;
     @JoinColumn(name = "user_favorite_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User userFavoriteId;
@@ -31,15 +31,15 @@ public class UserFavorite implements Serializable {
     public UserFavorite() {
     }
 
-    public UserFavorite(Integer id) {
+    public UserFavorite(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

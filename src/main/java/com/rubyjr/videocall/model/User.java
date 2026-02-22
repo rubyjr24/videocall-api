@@ -19,9 +19,10 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(nullable = false)
-    private Integer id;
+    private Long id;
     @Basic(optional = false)
     @Column(nullable = false, length = 50)
     private String name;
@@ -30,7 +31,7 @@ public class User implements Serializable {
     private String email;
     @Basic(optional = false)
     @Column(nullable = false, length = 256)
-    private String token;
+    private String password;
     @Basic(optional = false)
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -46,23 +47,23 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Integer id) {
+    public User(Long id) {
         this.id = id;
     }
 
-    public User(Integer id, String name, String email, String token, Date createdAt) {
+    public User(Long id, String name, String email, String password, Date createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.token = token;
+        this.password = password;
         this.createdAt = createdAt;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -82,12 +83,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getToken() {
-        return token;
+    public String getPassword() {
+        return password;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Date getCreatedAt() {
@@ -148,7 +149,7 @@ public class User implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", token='" + token + '\'' +
+                ", password='" + password + '\'' +
                 ", createdAt=" + createdAt +
                 ", roomInvitationList=" + roomInvitationList +
                 ", userFavoriteList=" + userFavoriteList +

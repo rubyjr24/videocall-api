@@ -44,7 +44,7 @@ public class RoomInvitation implements Serializable {
         this.isOwner = isOwner;
     }
 
-    public RoomInvitation(int roomId, int userId) {
+    public RoomInvitation(long roomId, long userId) {
         this.roomInvitationPK = new RoomInvitationPK(roomId, userId);
     }
 

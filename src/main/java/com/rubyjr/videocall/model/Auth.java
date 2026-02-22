@@ -23,9 +23,10 @@ public class Auth implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(nullable = false)
-    private Integer id;
+    private Long id;
     @Basic(optional = false)
     @Column(nullable = false, length = 256)
     private String token;
@@ -42,21 +43,21 @@ public class Auth implements Serializable {
     public Auth() {
     }
 
-    public Auth(Integer id) {
+    public Auth(Long id) {
         this.id = id;
     }
 
-    public Auth(Integer id, String token, Date createdAt) {
+    public Auth(Long id, String token, Date createdAt) {
         this.id = id;
         this.token = token;
         this.createdAt = createdAt;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -16,32 +16,32 @@ public class RoomInvitationPK implements Serializable {
 
     @Basic(optional = false)
     @Column(name = "room_id", nullable = false)
-    private int roomId;
+    private long roomId;
     @Basic(optional = false)
     @Column(name = "user_id", nullable = false)
-    private int userId;
+    private long userId;
 
     public RoomInvitationPK() {
     }
 
-    public RoomInvitationPK(int roomId, int userId) {
+    public RoomInvitationPK(long roomId, long userId) {
         this.roomId = roomId;
         this.userId = userId;
     }
 
-    public int getRoomId() {
+    public long getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(long roomId) {
         this.roomId = roomId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

@@ -1,0 +1,73 @@
+package com.rubyjr.videocall.security;
+
+import com.rubyjr.videocall.utilities.auth.AuthUtil;
+import com.rubyjr.videocall.utilities.auth.JwtUtil;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Component
+public class JwtFilter extends OncePerRequestFilter {
+
+    public static final String AUTH_HEADER = "Authorization";
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.startsWith("/auth/"); // No filtrar rutas de autenticación
+    }
+
+    @Override
+    public void doFilterInternal(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        FilterChain filterChain
+    ) throws ServletException, IOException {
+
+        String authHeader = request.getHeader(AUTH_HEADER);
+
+        if (authHeader == null){
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden: Invalid Token");
+            return;
+        }
+
+        if (!authHeader.startsWith(AuthUtil.BEARER)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden: Invalid Token");
+            return;
+        }
+
+        String token = authHeader.substring(AuthUtil.BEARER.length());
+        String email = this.jwtUtil.getEmail(token);
+
+        if (email == null || !this.jwtUtil.isTokenValid(token)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden: Invalid Token");
+            return;
+        }
+
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, token, List.of());
+
+            Map<String, Object> details = new HashMap<>();
+            details.put(JwtUtil.USER_ID_FIELD, this.jwtUtil.getUserId(token));
+            authentication.setDetails(details);
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+
+        filterChain.doFilter(request, response);
+    }
+}
