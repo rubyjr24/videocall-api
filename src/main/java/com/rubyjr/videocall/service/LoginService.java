@@ -1,8 +1,8 @@
 package com.rubyjr.videocall.service;
 
-import com.rubyjr.videocall.dto.AuthDto;
-import com.rubyjr.videocall.dto.LoginDto;
-import com.rubyjr.videocall.dto.SignUpDto;
+import com.rubyjr.videocall.dto.responses.AuthResponseDto;
+import com.rubyjr.videocall.dto.requests.LoginRequestDto;
+import com.rubyjr.videocall.dto.requests.SignUpRequestDto;
 import com.rubyjr.videocall.exceptions.EmailAlreadyExistsException;
 import com.rubyjr.videocall.exceptions.IncorrectPasswordOfUserException;
 import com.rubyjr.videocall.exceptions.UserNotFoundException;
@@ -42,10 +42,10 @@ public class LoginService {
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public AuthDto login(LoginDto loginDto){
+    public AuthResponseDto login(LoginRequestDto loginRequestDto){
 
-        String email = loginDto.getEmail();
-        String password = loginDto.getPassword();
+        String email = loginRequestDto.getEmail();
+        String password = loginRequestDto.getPassword();
 
         Assert.isNull(email, "email cannot be null");
         Assert.isNull(password, "password cannot be null");
@@ -83,7 +83,7 @@ public class LoginService {
 
         }
 
-        return new AuthDto(
+        return new AuthResponseDto(
             auth.getToken(),
             auth.getExpiredAt()
         );
@@ -91,11 +91,11 @@ public class LoginService {
     }
 
     @Transactional
-    public AuthDto signUp(SignUpDto signUpDto){
+    public AuthResponseDto signUp(SignUpRequestDto signUpRequestDto){
 
-        String email = signUpDto.getEmail();
-        String password = signUpDto.getPassword();
-        String name = signUpDto.getName();
+        String email = signUpRequestDto.getEmail();
+        String password = signUpRequestDto.getPassword();
+        String name = signUpRequestDto.getName();
 
         Assert.isNull(email, "email cannot be null");
         Assert.isNull(password, "password cannot be null");
@@ -122,7 +122,7 @@ public class LoginService {
 
         authToken = this.authRepository.save(authToken);
 
-        return new AuthDto(
+        return new AuthResponseDto(
             authToken.getToken(),
             authToken.getExpiredAt()
         );

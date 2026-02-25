@@ -1,4 +1,4 @@
-package com.rubyjr.videocall.dto;
+package com.rubyjr.videocall.dto.responses;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

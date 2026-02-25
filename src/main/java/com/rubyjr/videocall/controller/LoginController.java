@@ -1,8 +1,8 @@
 package com.rubyjr.videocall.controller;
 
-import com.rubyjr.videocall.dto.AuthDto;
-import com.rubyjr.videocall.dto.LoginDto;
-import com.rubyjr.videocall.dto.SignUpDto;
+import com.rubyjr.videocall.dto.responses.AuthResponseDto;
+import com.rubyjr.videocall.dto.requests.LoginRequestDto;
+import com.rubyjr.videocall.dto.requests.SignUpRequestDto;
 import com.rubyjr.videocall.service.LoginService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,13 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public AuthDto login(@Valid @RequestBody LoginDto loginDto) {
-        return this.loginService.login(loginDto);
+    public AuthResponseDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        return this.loginService.login(loginRequestDto);
     }
 
     @PostMapping("/sign-up")
-    public AuthDto signUp(@Valid @RequestBody SignUpDto signUpDto) {
-        return this.loginService.signUp(signUpDto);
+    public AuthResponseDto signUp(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
+        return this.loginService.signUp(signUpRequestDto);
     }
 
 

@@ -1,16 +1,16 @@
-package com.rubyjr.videocall.dto;
+package com.rubyjr.videocall.dto.responses;
 
 import java.util.Date;
 
-public class AuthDto {
+public class AuthResponseDto {
 
     private String token;
     private Date expiresAt;
 
-    public AuthDto() {
+    public AuthResponseDto() {
     }
 
-    public AuthDto(String token, Date expiresAt) {
+    public AuthResponseDto(String token, Date expiresAt) {
         this.token = token;
         this.expiresAt = expiresAt;
     }

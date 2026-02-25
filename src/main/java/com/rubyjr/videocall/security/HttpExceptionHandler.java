@@ -1,7 +1,7 @@
 package com.rubyjr.videocall.security;
 
 
-import com.rubyjr.videocall.dto.ErrorResponseDto;
+import com.rubyjr.videocall.dto.responses.ErrorResponseDto;
 import com.rubyjr.videocall.exceptions.EmailAlreadyExistsException;
 import com.rubyjr.videocall.exceptions.IncorrectPasswordOfUserException;
 import com.rubyjr.videocall.exceptions.NotValidTokenException;

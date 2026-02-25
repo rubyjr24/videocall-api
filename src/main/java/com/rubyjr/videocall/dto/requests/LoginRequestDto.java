@@ -1,10 +1,10 @@
-package com.rubyjr.videocall.dto;
+package com.rubyjr.videocall.dto.requests;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class LoginDto {
+public class LoginRequestDto {
 
     @NotBlank
     @Email
@@ -14,9 +14,9 @@ public class LoginDto {
     @NotBlank
     private String password;
 
-    public LoginDto() {}
+    public LoginRequestDto() {}
 
-    public LoginDto(String email, String password) {
+    public LoginRequestDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
