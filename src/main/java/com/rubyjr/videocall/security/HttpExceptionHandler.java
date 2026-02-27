@@ -13,6 +13,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +76,12 @@ public class HttpExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handle(HttpMessageConversionException ex) {
         ErrorResponseDto errorResponse = new ErrorResponseDto("MALFORMED_REQUEST", "The request is not correctly formatted");
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handle() {
+        ErrorResponseDto errorResponse = new ErrorResponseDto("NOT_FOUND", "The request's endpoint is not found");
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

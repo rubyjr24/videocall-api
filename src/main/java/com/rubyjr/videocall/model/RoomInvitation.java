@@ -80,11 +80,11 @@ public class RoomInvitation implements Serializable {
         this.room = room;
     }
 
-    public User getUsers() {
+    public User getUser() {
         return user;
     }
 
-    public void setUsers(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
