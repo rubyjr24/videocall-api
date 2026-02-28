@@ -9,9 +9,11 @@ import com.rubyjr.videocall.repository.UserRepository;
 import com.rubyjr.videocall.utilities.Assert;
 import com.rubyjr.videocall.utilities.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -51,6 +53,11 @@ public class AuthUtil {
 
     public String getTokenFromAuthorization(String headerValue){
         return headerValue.replaceFirst(BEARER, "");
+    }
+
+    public static Long getUserIdFromAuthentication(Authentication authentication){
+        Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
+        return (Long) details.get(JwtUtil.USER_ID_FIELD);
     }
 
 }

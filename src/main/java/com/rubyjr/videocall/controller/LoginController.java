@@ -4,14 +4,11 @@ import com.rubyjr.videocall.dto.responses.AuthResponseDto;
 import com.rubyjr.videocall.dto.requests.LoginRequestDto;
 import com.rubyjr.videocall.dto.requests.SignUpRequestDto;
 import com.rubyjr.videocall.service.LoginService;
-import com.rubyjr.videocall.utilities.auth.JwtUtil;
+import com.rubyjr.videocall.utilities.auth.AuthUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 public class LoginController {
@@ -33,10 +30,7 @@ public class LoginController {
 
     @GetMapping(value = "/logout")
     public void logout(Authentication authentication){
-        Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
-        Long userId = (Long) details.get(JwtUtil.USER_ID_FIELD);
-
-        this.loginService.logout(userId);
+        this.loginService.logout(AuthUtil.getUserIdFromAuthentication(authentication));
     }
 
 }

@@ -21,16 +21,20 @@ public class UserFavorite implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     private UserFavoritePK id;
-    @JoinColumn(name = "user_favorite_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @MapsId("userFavoriteId")
-    private User userFavorite;
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @MapsId("userId")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_favorite_id", insertable = false, updatable = false)
+    private User userFavorite;
+
     public UserFavorite() {
+    }
+
+    public UserFavorite(UserFavoritePK id) {
+        this.id = id;
     }
 
     public UserFavoritePK getId() {
@@ -73,8 +77,6 @@ public class UserFavorite implements Serializable {
     public String toString() {
         return "UserFavorite{" +
                 "id=" + id +
-                ", userFavorite=" + userFavorite +
-                ", user=" + user +
                 '}';
     }
 }

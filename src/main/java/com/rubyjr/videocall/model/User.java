@@ -40,8 +40,10 @@ public class User implements Serializable {
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<RoomInvitation> roomInvitationList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserFavorite> userFavoriteListUser;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFavorite", fetch = FetchType.LAZY)
-    private List<UserFavorite> userFavoriteList;
+    private List<UserFavorite> userFavoriteListUserFavorite;
     @JoinColumn(name = "auth_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Auth auth;
@@ -101,20 +103,28 @@ public class User implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public List<RoomInvitation> getRoomInvitationsList() {
+    public List<RoomInvitation> getRoomInvitationList() {
         return roomInvitationList;
     }
 
-    public void setRoomInvitationsList(List<RoomInvitation> roomInvitationList) {
+    public void setRoomInvitationList(List<RoomInvitation> roomInvitationList) {
         this.roomInvitationList = roomInvitationList;
     }
 
-    public List<UserFavorite> getUserFavoritesList() {
-        return userFavoriteList;
+    public List<UserFavorite> getUserFavoriteListUser() {
+        return userFavoriteListUser;
     }
 
-    public void setUserFavoritesList(List<UserFavorite> userFavoriteList) {
-        this.userFavoriteList = userFavoriteList;
+    public void setUserFavoriteListUser(List<UserFavorite> userFavoriteListUser) {
+        this.userFavoriteListUser = userFavoriteListUser;
+    }
+
+    public List<UserFavorite> getUserFavoriteListUserFavorite() {
+        return userFavoriteListUserFavorite;
+    }
+
+    public void setUserFavoriteListUserFavorite(List<UserFavorite> userFavoriteListUserFavorite) {
+        this.userFavoriteListUserFavorite = userFavoriteListUserFavorite;
     }
 
     public Auth getAuth() {
@@ -146,7 +156,6 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", createdAt=" + createdAt +
                 ", roomInvitationList=" + roomInvitationList +
-                ", userFavoriteList=" + userFavoriteList +
                 ", auth=" + auth +
                 '}';
     }

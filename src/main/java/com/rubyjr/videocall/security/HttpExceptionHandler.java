@@ -2,10 +2,7 @@ package com.rubyjr.videocall.security;
 
 
 import com.rubyjr.videocall.dto.responses.ErrorResponseDto;
-import com.rubyjr.videocall.exceptions.EmailAlreadyExistsException;
-import com.rubyjr.videocall.exceptions.IncorrectPasswordOfUserException;
-import com.rubyjr.videocall.exceptions.NotValidTokenException;
-import com.rubyjr.videocall.exceptions.UserNotFoundException;
+import com.rubyjr.videocall.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -43,6 +40,18 @@ public class HttpExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handle(NotValidTokenException ex) {
         ErrorResponseDto errorResponse = new ErrorResponseDto("NOT_VALID_TOKEN", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handle(ResourceNotFoundException ex) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto("RESOURCE_NOT_FOUND", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handle(EntityAlreadyExistsException ex) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto("RESOURCE_ALREDY_EXISTS", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

@@ -41,4 +41,12 @@ public class UserFavoritePK implements Serializable {
     public int hashCode() {
         return Objects.hash(userId, userFavoriteId);
     }
+
+    @Override
+    public String toString() {
+        return "UserFavoritePK{" +
+                "userId=" + userId +
+                ", userFavoriteId=" + userFavoriteId +
+                '}';
+    }
 }
