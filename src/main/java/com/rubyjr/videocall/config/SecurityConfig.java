@@ -38,6 +38,7 @@ public class SecurityConfig {
                     .requestMatchers("/auth/**").permitAll() // No hace falta autenticarse
                     .anyRequest().authenticated() // Se autentican necesita autenticación en todos los endpoints
             )
+            .logout(AbstractHttpConfigurer::disable) // Quitamos mi logout porque lo tenemos personalizado
             .httpBasic(AbstractHttpConfigurer::disable) // Quitamos auteticacion con Basic
             .formLogin(AbstractHttpConfigurer::disable) // Quitamos login html
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

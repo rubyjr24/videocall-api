@@ -5,6 +5,8 @@
 package com.rubyjr.videocall.model;
 
 import java.io.Serializable;
+import java.util.Objects;
+
 import jakarta.persistence.*;
 
 /**
@@ -46,32 +48,20 @@ public class RoomInvitationPK implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (int) roomId;
-        hash += (int) userId;
-        return hash;
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        RoomInvitationPK that = (RoomInvitationPK) o;
+        return roomId == that.roomId && userId == that.userId;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RoomInvitationPK)) {
-            return false;
-        }
-        RoomInvitationPK other = (RoomInvitationPK) object;
-        if (this.roomId != other.roomId) {
-            return false;
-        }
-        if (this.userId != other.userId) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return Objects.hash(roomId, userId);
     }
 
     @Override
     public String toString() {
-        return "RoomInvitationsPK{" +
+        return "RoomInvitationPK{" +
                 "roomId=" + roomId +
                 ", userId=" + userId +
                 '}';

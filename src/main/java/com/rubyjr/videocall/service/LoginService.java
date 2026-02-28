@@ -129,4 +129,17 @@ public class LoginService {
 
     }
 
+    public void logout(Long userId){
+
+        Optional<User> userOptional = this.userRepository.findByIdFetchingAuth(userId);
+
+        Assert.ifCondition(userOptional.isEmpty(), new RuntimeException()); //cambiar
+
+        Auth auth = userOptional.get().getAuth();
+
+        if (auth == null) return;
+
+        this.authRepository.delete(auth);
+    }
+
 }

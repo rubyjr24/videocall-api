@@ -7,6 +7,8 @@ package com.rubyjr.videocall.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
 import jakarta.persistence.*;
 
 /**
@@ -38,11 +40,11 @@ public class User implements Serializable {
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<RoomInvitation> roomInvitationList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFavoriteId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFavorite", fetch = FetchType.LAZY)
     private List<UserFavorite> userFavoriteList;
     @JoinColumn(name = "auth_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Auth authId;
+    private Auth auth;
 
     public User() {
     }
@@ -115,32 +117,24 @@ public class User implements Serializable {
         this.userFavoriteList = userFavoriteList;
     }
 
-    public Auth getAuthId() {
-        return authId;
+    public Auth getAuth() {
+        return auth;
     }
 
-    public void setAuthId(Auth authId) {
-        this.authId = authId;
+    public void setAuth(Auth auth) {
+        this.auth = auth;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof User)) {
-            return false;
-        }
-        User other = (User) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -153,7 +147,7 @@ public class User implements Serializable {
                 ", createdAt=" + createdAt +
                 ", roomInvitationList=" + roomInvitationList +
                 ", userFavoriteList=" + userFavoriteList +
-                ", authId=" + authId +
+                ", auth=" + auth +
                 '}';
     }
 }

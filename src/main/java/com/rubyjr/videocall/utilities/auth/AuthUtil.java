@@ -42,7 +42,7 @@ public class AuthUtil {
         Optional<User> userOptional = this.userRepository.findById(userId);
         Assert.ifCondition(userOptional.isEmpty(), exception);
 
-        Auth auth = userOptional.get().getAuthId();
+        Auth auth = userOptional.get().getAuth();
 
         Assert.ifCondition(auth.getExpiredAt().after(new Date()), exception);
 
