@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,6 +53,18 @@ public class HttpExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handle(EntityAlreadyExistsException ex) {
         ErrorResponseDto errorResponse = new ErrorResponseDto("RESOURCE_ALREDY_EXISTS", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ResourceNotBelongToUserException.class)
+    public ResponseEntity<ErrorResponseDto> handle(ResourceNotBelongToUserException ex) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto("RESOURCE_NOT_BELONG_TO_USER", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDto> handle(AccessDeniedException ex) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto("ACCESS_DENIED", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

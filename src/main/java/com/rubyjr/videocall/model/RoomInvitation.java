@@ -20,13 +20,16 @@ public class RoomInvitation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected RoomInvitationPK roomInvitationPK;
+    protected RoomInvitationPK id;
     @Basic(optional = false)
     @Column(name = "is_owner", nullable = false)
     private boolean isOwner;
     @Column(name = "joined_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date joinedAt;
+    @Column(name = "left_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date leftAt;
     @JoinColumn(name = "room_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Room room;
@@ -37,33 +40,33 @@ public class RoomInvitation implements Serializable {
     public RoomInvitation() {
     }
 
-    public RoomInvitation(RoomInvitationPK roomInvitationPK) {
-        this.roomInvitationPK = roomInvitationPK;
+    public RoomInvitation(RoomInvitationPK id) {
+        this.id = id;
     }
 
-    public RoomInvitation(RoomInvitationPK roomInvitationPK, boolean isOwner) {
-        this.roomInvitationPK = roomInvitationPK;
+    public RoomInvitation(RoomInvitationPK id, boolean isOwner) {
+        this.id = id;
         this.isOwner = isOwner;
     }
 
     public RoomInvitation(long roomId, long userId) {
-        this.roomInvitationPK = new RoomInvitationPK(roomId, userId);
+        this.id = new RoomInvitationPK(roomId, userId);
     }
 
-    public RoomInvitationPK getRoomInvitationsPK() {
-        return roomInvitationPK;
+    public RoomInvitationPK getId() {
+        return id;
     }
 
-    public void setRoomInvitationsPK(RoomInvitationPK roomInvitationPK) {
-        this.roomInvitationPK = roomInvitationPK;
+    public void setId(RoomInvitationPK id) {
+        this.id = id;
     }
 
-    public boolean getIsOwner() {
+    public boolean isOwner() {
         return isOwner;
     }
 
-    public void setIsOwner(boolean isOwner) {
-        this.isOwner = isOwner;
+    public void setOwner(boolean owner) {
+        isOwner = owner;
     }
 
     public Date getJoinedAt() {
@@ -74,11 +77,19 @@ public class RoomInvitation implements Serializable {
         this.joinedAt = joinedAt;
     }
 
-    public Room getRooms() {
+    public Date getLeftAt() {
+        return leftAt;
+    }
+
+    public void setLeftAt(Date leftAt) {
+        this.leftAt = leftAt;
+    }
+
+    public Room getRoom() {
         return room;
     }
 
-    public void setRooms(Room room) {
+    public void setRoom(Room room) {
         this.room = room;
     }
 
@@ -94,22 +105,21 @@ public class RoomInvitation implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         RoomInvitation that = (RoomInvitation) o;
-        return Objects.equals(roomInvitationPK, that.roomInvitationPK);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(roomInvitationPK);
+        return Objects.hashCode(id);
     }
 
     @Override
     public String toString() {
         return "RoomInvitation{" +
-                "roomInvitationPK=" + roomInvitationPK +
-                ", isOwner=" + isOwner +
+                "leftAt=" + leftAt +
                 ", joinedAt=" + joinedAt +
-                ", room=" + room +
-                ", user=" + user +
+                ", isOwner=" + isOwner +
+                ", id=" + id +
                 '}';
     }
 }

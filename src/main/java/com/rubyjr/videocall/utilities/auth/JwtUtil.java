@@ -71,8 +71,7 @@ public class JwtUtil {
 
     public boolean isTokenValid(String token) {
         try {
-            getUserId(token);
-            return true;
+            return getUserId(token) != null;
         } catch (JwtException e) {
             return false;
         }

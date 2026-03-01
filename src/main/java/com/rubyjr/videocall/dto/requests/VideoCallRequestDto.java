@@ -11,7 +11,6 @@ public class VideoCallRequestDto {
     private String name;
 
     @NotNull
-    @NotEmpty
     private List<@Email String> emails;
 
     public VideoCallRequestDto() {

@@ -24,12 +24,36 @@ public class VideoCallController {
         return this.videoCallService.getAllVideoCallsOfUser(AuthUtil.getUserIdFromAuthentication(authentication));
     }
 
+    @GetMapping(value = "/invitations")
+    @ResponseBody
+    public List<RoomDto> getAllInvitationsOfUser(Authentication authentication){
+        return this.videoCallService.getAllInvitationsOfUser(AuthUtil.getUserIdFromAuthentication(authentication));
+    }
+
+    @DeleteMapping(value = "/{roomId}")
+    @ResponseBody
+    public RoomDto deleteRoom(@PathVariable("roomId") Long roomId, Authentication authentication){
+        return this.videoCallService.deleteRoom(
+            roomId,
+            AuthUtil.getUserIdFromAuthentication(authentication)
+        );
+    }
+
     @PostMapping(value = "/create")
     @ResponseBody
     public RoomDto createVideoCall(@Valid @RequestBody VideoCallRequestDto videoCallRequestDto, Authentication authentication){
         return this.videoCallService.createVideoCall(
                 videoCallRequestDto,
                 AuthUtil.getUserIdFromAuthentication(authentication)
+        );
+    }
+
+    @GetMapping(value = "/{roomId}/join")
+    @ResponseBody
+    public RoomDto joinVideoCall(@PathVariable("roomId") Long roomId, Authentication authentication){
+        return this.videoCallService.joinVideoCall(
+            roomId,
+            AuthUtil.getUserIdFromAuthentication(authentication)
         );
     }
 }

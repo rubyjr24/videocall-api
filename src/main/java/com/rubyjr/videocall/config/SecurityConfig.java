@@ -35,7 +35,7 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             ) // Quitamos las sesiones
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/auth/**").permitAll() // No hace falta autenticarse
+                    .requestMatchers("/auth/**", "/ws").permitAll() // No hace falta autenticarse
                     .anyRequest().authenticated() // Se autentican necesita autenticación en todos los endpoints
             )
             .logout(AbstractHttpConfigurer::disable) // Quitamos mi logout porque lo tenemos personalizado

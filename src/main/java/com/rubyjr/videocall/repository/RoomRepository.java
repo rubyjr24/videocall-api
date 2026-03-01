@@ -14,9 +14,17 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
         SELECT DISTINCT r
         FROM Room r
             JOIN r.roomInvitationList ri
-        WHERE ri.user.id = :user
-            AND ri.isOwner = true
+        WHERE ri.id.userId = :userId
+            AND ri.isOwner = :isOwner
     """)
-    Optional<List<Room>> findAllRoomsByUserIdFechingRoomInvitations(@Param("user") Long user);
+    Optional<List<Room>> findAllRoomsByUserIdFechingRoomInvitations(@Param("userId") Long userId, @Param("isOwner") boolean isOwner);
+
+    @Query("""
+        SELECT DISTINCT r
+        FROM Room r
+            JOIN r.roomInvitationList ri
+        WHERE r.id = :roomId
+    """)
+    Optional<Room> findByIdFechingRoomInvitations(@Param("roomId") Long roomId);
 
 }
