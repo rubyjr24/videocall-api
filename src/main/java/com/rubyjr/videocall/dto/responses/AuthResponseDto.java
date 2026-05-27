@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class AuthResponseDto {
 
+    private Long userId;
     private String token;
     private Date expiresAt;
 
@@ -11,6 +12,12 @@ public class AuthResponseDto {
     }
 
     public AuthResponseDto(String token, Date expiresAt) {
+        this.token = token;
+        this.expiresAt = expiresAt;
+    }
+
+    public AuthResponseDto(Long userId, String token, Date expiresAt) {
+        this.userId = userId;
         this.token = token;
         this.expiresAt = expiresAt;
     }
@@ -29,5 +36,13 @@ public class AuthResponseDto {
 
     public void setExpiresAt(Date expiresAt) {
         this.expiresAt = expiresAt;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

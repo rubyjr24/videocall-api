@@ -5,11 +5,16 @@ import com.rubyjr.videocall.utilities.Properties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
@@ -75,5 +80,32 @@ public class JwtUtil {
         } catch (JwtException e) {
             return false;
         }
+    }
+
+    public UsernamePasswordAuthenticationToken createAuthentication(String authHeader){
+
+        Assert.isNull(authHeader, new AccessDeniedException("Forbidden: Invalid Token"));
+        Assert.ifCondition(!authHeader.startsWith(AuthUtil.BEARER), new AccessDeniedException("Forbidden: Invalid Token"));
+
+        String token = authHeader.substring(AuthUtil.BEARER.length());
+        String email = getEmail(token);
+
+        Assert.isNull(email, new AccessDeniedException("Forbidden: Invalid Token"));
+        Assert.ifCondition(!isTokenValid(token), new AccessDeniedException("Forbidden: Invalid Token"));
+
+        Long userId = getUserId(token);
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                String.valueOf(userId),
+                token,
+                List.of()
+        );
+
+        Map<String, Object> details = new HashMap<>();
+        details.put(JwtUtil.USER_ID_FIELD, userId);
+        authentication.setDetails(details);
+
+        return authentication;
+
     }
 }

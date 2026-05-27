@@ -59,21 +59,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
 
                     String authHeader = accessor.getFirstNativeHeader("Authorization");
-
-                    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                        throw new IllegalArgumentException("Missing or invalid Authorization header");
-                    }
-
-                    String token = authHeader.substring(7);
-
-                    if (!jwtUtil.isTokenValid(token)) {
-                        throw new IllegalArgumentException("Invalid JWT token");
-                    }
-
-                    String email = jwtUtil.getEmail(token);
-
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(email, token, List.of());
-
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = jwtUtil.createAuthentication(authHeader);
                     accessor.setUser(usernamePasswordAuthenticationToken);
 
                 }

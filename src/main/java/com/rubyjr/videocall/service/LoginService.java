@@ -84,6 +84,7 @@ public class LoginService {
         }
 
         return new AuthResponseDto(
+            user.getId(),
             auth.getToken(),
             auth.getExpiredAt()
         );
@@ -123,6 +124,7 @@ public class LoginService {
         authToken = this.authRepository.save(authToken);
 
         return new AuthResponseDto(
+            user.getId(),
             authToken.getToken(),
             authToken.getExpiredAt()
         );

@@ -116,7 +116,7 @@ public class VideoCallService {
         for (User user: users){
             if (Objects.equals(user.getId(), userId)) continue;
             this.simpMessagingTemplate.convertAndSendToUser(
-                    user.getEmail(),
+                    user.getId().toString(),
                     NEW_CALL_PATH,
                     roomDto
             );
@@ -160,7 +160,7 @@ public class VideoCallService {
 
         for (User user: usersOptional.get()){
             this.simpMessagingTemplate.convertAndSendToUser(
-                    user.getEmail(),
+                    user.getId().toString(),
                     DELETE_CALL_PATH,
                     roomDto
             );
