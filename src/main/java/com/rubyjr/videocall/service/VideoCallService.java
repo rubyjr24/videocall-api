@@ -188,6 +188,7 @@ public class VideoCallService {
         Assert.isNull(roomInvitationOfUser, new AccessDeniedException("You do not have access"));
 
         roomInvitationOfUser.setJoinedAt(new Date());
+        roomInvitationOfUser.setLeftAt(null);
         roomInvitationOfUser = this.roomInvitationRepository.save(roomInvitationOfUser);
 
         this.simpMessagingTemplate.convertAndSend(

@@ -18,9 +18,9 @@ public class VideoCallWebsocketController {
 
     @MessageMapping("/room/{roomId}/signal")
     public void signal(
-            @DestinationVariable String roomId,
-            SignalMessage message,
-            Principal principal
+        @DestinationVariable String roomId,
+        SignalMessage message,
+        Principal principal
     ) {
         message.setFrom(principal.getName());
 

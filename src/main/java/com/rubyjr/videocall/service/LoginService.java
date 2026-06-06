@@ -85,6 +85,8 @@ public class LoginService {
 
         return new AuthResponseDto(
             user.getId(),
+            user.getEmail(),
+            user.getName(),
             auth.getToken(),
             auth.getExpiredAt()
         );
@@ -125,6 +127,8 @@ public class LoginService {
 
         return new AuthResponseDto(
             user.getId(),
+            user.getEmail(),
+            user.getName(),
             authToken.getToken(),
             authToken.getExpiredAt()
         );
