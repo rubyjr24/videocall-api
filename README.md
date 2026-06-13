@@ -11,6 +11,18 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 * **IntelliJ IDEA** (Versión 2025.1 o superior recomendada para soporte nativo de Java 25).
 * **Git** instalado en tu sistema.
 * **Maven** instalado en tu sistema.
+
+---
+
+## 🗄️ Configuración de la Base de Datos
+
+Para que la API funcione correctamente, es necesario inicializar el esquema en tu servidor de base de datos local:
+
+1. Asegúrate de que tu servicio de base de datos esté activo.
+2. Ejecuta el archivo `structure.sql` localizado en la carpeta `/src/main/resources/sql/` para crear el esquema, todas las tablas y relaciones necesarias.
+
+> **Nota:** No olvides actualizar las credenciales de conexión (usuario, contraseña y URL) en el archivo `db.properties` antes de ejecutar la aplicación.
+
 ---
 
 ## ☕ Instalación de JDK 25 en IntelliJ IDEA
