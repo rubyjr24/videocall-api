@@ -2,15 +2,18 @@ package com.rubyjr.videocall.dto.requests;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class LoginRequestDto {
 
+    @NotNull
     @NotBlank
     @Email
     @Size(max = 256)
     private String email;
 
+    @NotNull
     @NotBlank
     private String password;
 

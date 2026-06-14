@@ -47,15 +47,14 @@ public class LoginService {
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
 
-        Assert.isNull(email, "email cannot be null");
-        Assert.isNull(password, "password cannot be null");
-
         Optional<User> optionalUser = this.userRepository.findByEmail(email);
 
         Assert.ifCondition(optionalUser.isEmpty(), new UserNotFoundException("There is not user with this email address"));
 
         User user = optionalUser.get();
         String passwordUserDb = user.getPassword();
+
+        Assert.ifCondition(!encoder.matches(password, passwordUserDb), new IncorrectPasswordOfUserException("Passwords are not equals"));
 
         Date now = new Date();
         Date expiration = new Date(now.getTime() + this.properties.getTokenExpirationTime() * 1000);
@@ -70,8 +69,6 @@ public class LoginService {
 
             return this.authRepository.save(newAuthToken);
         });
-
-        Assert.ifCondition(!encoder.matches(password, passwordUserDb), new IncorrectPasswordOfUserException("Passwords are not equals"));
 
         if (auth.getExpiredAt().before(now)){
 
