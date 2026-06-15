@@ -6,11 +6,13 @@ import java.util.List;
 
 public class VideoCallRequestDto {
 
+    @NotNull
     @NotBlank
     @Size(max = 50)
     private String name;
 
     @NotNull
+    @NotEmpty
     private List<@Email String> emails;
 
     public VideoCallRequestDto() {
