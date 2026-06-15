@@ -15,6 +15,7 @@ import com.rubyjr.videocall.repository.RoomInvitationRepository;
 import com.rubyjr.videocall.repository.RoomRepository;
 import com.rubyjr.videocall.repository.UserRepository;
 import com.rubyjr.videocall.utilities.Assert;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.AccessDeniedException;
@@ -76,6 +77,7 @@ public class VideoCallService {
                 .toList();
     }
 
+    @Transactional
     public RoomDto createVideoCall(VideoCallRequestDto videoCallRequestDto, Long userId){
 
         Room room = new Room();
