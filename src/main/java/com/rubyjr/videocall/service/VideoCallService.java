@@ -91,10 +91,10 @@ public class VideoCallService {
         ));
 
         Optional<List<User>> usersOptional = this.userRepository.findByEmails(videoCallRequestDto.getEmails());
-        Assert.ifCondition(usersOptional.isEmpty(), new RuntimeException());// Cambiar
+        Assert.ifCondition(usersOptional.isEmpty(), new RuntimeException("No users were found"));
 
         List<User> users = usersOptional.get();
-        Assert.ifCondition(users.contains(new User(userId)), new RuntimeException()); // Cambiar
+        Assert.ifCondition(users.contains(new User(userId)), new RuntimeException("The email list cannot be self-contained"));
 
         for (User user: users){
             roomInvitationList.add(
