@@ -97,10 +97,6 @@ public class LoginService {
         String password = signUpRequestDto.getPassword();
         String name = signUpRequestDto.getName();
 
-        Assert.isNull(email, "email cannot be null");
-        Assert.isNull(password, "password cannot be null");
-        Assert.isNull(name, "name cannot be null");
-
         Boolean userExists = this.userRepository.existsByEmail(email);
 
         Assert.ifCondition(userExists, new EmailAlreadyExistsException("There is an user with this email"));
