@@ -6,6 +6,8 @@ import java.util.List;
 
 public class VideoCallRequestDto {
 
+    private Long roomId;
+
     @NotNull
     @NotBlank
     @Size(max = 50)
@@ -25,6 +27,14 @@ public class VideoCallRequestDto {
     public VideoCallRequestDto(String name, List<String> emails) {
         this.name = name;
         this.emails = emails;
+    }
+
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
     }
 
     public String getName() {

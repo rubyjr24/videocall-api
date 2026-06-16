@@ -39,12 +39,23 @@ public class VideoCallController {
         );
     }
 
+    @PutMapping(value = "/{roomId}")
+    @ResponseBody
+    public RoomDto editRoom(@Valid @RequestBody VideoCallRequestDto videoCallRequestDto, Authentication authentication){
+        return this.videoCallService.editRoom(
+            videoCallRequestDto.getRoomId(),
+            videoCallRequestDto.getName(),
+            videoCallRequestDto.getEmails(),
+            AuthUtil.getUserIdFromAuthentication(authentication)
+        );
+    }
+
     @PostMapping(value = "/create")
     @ResponseBody
     public RoomDto createVideoCall(@Valid @RequestBody VideoCallRequestDto videoCallRequestDto, Authentication authentication){
         return this.videoCallService.createVideoCall(
-                videoCallRequestDto,
-                AuthUtil.getUserIdFromAuthentication(authentication)
+            videoCallRequestDto,
+            AuthUtil.getUserIdFromAuthentication(authentication)
         );
     }
 

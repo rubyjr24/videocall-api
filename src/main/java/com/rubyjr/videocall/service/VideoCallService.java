@@ -22,6 +22,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class VideoCallService {
@@ -88,8 +89,8 @@ public class VideoCallService {
 
         // El primero que añadimos es el owner, el que hace la petición
         roomInvitationList.add(new RoomInvitation(
-                new RoomInvitationPK(room.getId(), userId),
-                true
+            new RoomInvitationPK(room.getId(), userId),
+            true
         ));
 
         Optional<List<User>> usersOptional = this.userRepository.findByEmails(videoCallRequestDto.getEmails());
@@ -127,6 +128,7 @@ public class VideoCallService {
         return roomDto;
     }
 
+    @Transactional
     public RoomDto deleteRoom(Long roomId, Long userId){
 
         Optional<Room> roomOptional = this.roomRepository.findByIdFechingRoomInvitations(roomId);
@@ -134,16 +136,7 @@ public class VideoCallService {
         Assert.ifCondition(roomOptional.isEmpty(), new ResourceNotFoundException("The resource has not been found"));
 
         Room room = roomOptional.get();
-
-        boolean isOwner = false;
-        for (RoomInvitation roomInvitation : room.getRoomInvitationsList()){
-            if (roomInvitation.getId().getUserId() == userId){
-                isOwner = roomInvitation.isOwner();
-                break;
-            }
-        }
-
-        Assert.ifCondition(!isOwner, new ResourceNotBelongToUserException("The resource you are trying to delete does not belong to the user"));
+        Assert.ifCondition(!this.isUserIdOwner(room, userId), new ResourceNotBelongToUserException("The resource you are trying to delete does not belong to the user"));
 
         this.roomRepository.deleteById(roomId);
 
@@ -171,6 +164,85 @@ public class VideoCallService {
         return roomDto;
     }
 
+    private RoomInvitation getRoomInvitation(Room room, Long userId){
+        for (RoomInvitation roomInvitation : room.getRoomInvitationsList()){
+            if (roomInvitation.getId().getUserId() == userId){
+                return roomInvitation;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean isUserIdOwner(Room room, Long userId){
+        RoomInvitation roomInvitation = this.getRoomInvitation(room, userId);
+        return roomInvitation != null && roomInvitation.isOwner();
+    }
+
+    @Transactional
+    public RoomDto editRoom(Long roomId, String name, List<String> emails, Long userId){
+
+        Optional<Room> roomOptional = this.roomRepository.findByIdFechingRoomInvitations(roomId);
+
+        Assert.ifCondition(roomOptional.isEmpty(), new ResourceNotFoundException("The resource has not been found"));
+
+        Room room = roomOptional.get();
+        RoomInvitation roomInvitation = this.getRoomInvitation(room, userId);
+        Assert.ifCondition(roomInvitation == null || !roomInvitation.isOwner(), new ResourceNotBelongToUserException("The resource you are trying to delete does not belong to the user"));
+
+        Optional<List<User>> usersOptional = this.userRepository.findByEmails(emails);
+        Assert.ifCondition(usersOptional.isEmpty(), new RuntimeException("No users were found"));
+
+        List<User> users = usersOptional.get();
+        Assert.ifCondition(users.contains(new User(userId)), new RuntimeException("The email list cannot be self-contained"));
+
+        List<RoomInvitation> beforeEditInvitations = new ArrayList<>(room.getRoomInvitationsList());
+
+        room.getRoomInvitationsList().clear();
+
+        List<RoomInvitationPK> idsToDelete = beforeEditInvitations.stream()
+                .map(RoomInvitation::getId)
+                .toList();
+
+        if (!idsToDelete.isEmpty()) {
+            this.roomInvitationRepository.deleteAllById(idsToDelete);
+            this.roomInvitationRepository.flush(); // Forzar los DELETE en la BD ahora mismo
+        }
+
+        room.getRoomInvitationsList().add(roomInvitation);
+        for (User user: users){
+            RoomInvitation roomInvitation1 = new RoomInvitation(
+                new RoomInvitationPK(room.getId(), user.getId())
+            );
+
+            roomInvitation1.setRoom(room);
+            roomInvitation1.setUser(user);
+            roomInvitation1.setOwner(Objects.equals(user.getId(), userId));
+
+            room.getRoomInvitationsList().add(roomInvitation1);
+        }
+
+        room.setName(name);
+        room = this.roomRepository.save(room);
+        RoomDto roomDto = this.roomMapper.toDto(room);
+
+        Set<RoomInvitation> roomInvitationSet = new HashSet<>(room.getRoomInvitationsList());
+        List<User> usersNotInvited = beforeEditInvitations.stream()
+            .filter(elemento -> !roomInvitationSet.contains(elemento))
+            .map(RoomInvitation::getUser)
+            .toList();
+
+        for (User user: usersNotInvited){
+            this.simpMessagingTemplate.convertAndSendToUser(
+                user.getId().toString(),
+                DELETE_CALL_PATH,
+                roomDto
+            );
+        }
+
+        return roomDto;
+    }
+
     public RoomDto joinVideoCall(Long roomId, Long userId){
 
         Optional<Room> roomOptional = this.roomRepository.findByIdFechingRoomInvitations(roomId);
@@ -178,14 +250,7 @@ public class VideoCallService {
         Assert.ifCondition(roomOptional.isEmpty(), new ResourceNotFoundException("The resource has not been found"));
 
         Room room = roomOptional.get();
-
-        RoomInvitation roomInvitationOfUser = null;
-        for (RoomInvitation roomInvitation : room.getRoomInvitationsList()){
-            if (roomInvitation.getId().getUserId() == userId){
-                roomInvitationOfUser = roomInvitation;
-                break;
-            }
-        }
+        RoomInvitation roomInvitationOfUser = this.getRoomInvitation(room, userId);
 
         Assert.isNull(roomInvitationOfUser, new AccessDeniedException("You do not have access"));
 
